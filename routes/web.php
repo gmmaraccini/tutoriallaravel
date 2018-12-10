@@ -15,11 +15,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('teste', function () {
-    return view('teste');
-});
-
-
-
-Route::get('/usuarios','UsuariosController@index');
-
+Route::resource('task','TaskController');

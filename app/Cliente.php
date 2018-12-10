@@ -10,5 +10,5 @@ class Cliente extends Model
     	'nome',
     	'endereco',
     	'numero'
-    ]
+    ];
 }
