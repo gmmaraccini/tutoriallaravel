@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Task;
 
 class TaskController extends Controller
 {
@@ -13,7 +14,8 @@ class TaskController extends Controller
      */
     public function index()
     {
-        //
+        $tasks = Task::all();
+        return view('tasks.index', compact('tasks'));
     }
 
     /**
@@ -23,7 +25,7 @@ class TaskController extends Controller
      */
     public function create()
     {
-        return view('task.create');
+        return view('tasks.create');
     }
 
     /**
@@ -34,6 +36,7 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
+        
         $request->validate([
             'nome' => 'required',
             'endereco' => 'required',
@@ -44,10 +47,10 @@ class TaskController extends Controller
             'nome' => $request->get('nome'),
             'endereco' => $request->get('endereco'),
             'numero' => $request->get('numero')
-        ])
+        ]);
 
         $task->save();
-        return redirect ('/tasks')->with('sucess','A task foi adicionada')
+        return redirect ('/tasks')->with('sucess','A task foi adicionada');
     }
 
     /**
@@ -69,7 +72,9 @@ class TaskController extends Controller
      */
     public function edit($id)
     {
-        //
+        $task = Task::find($id);
+        return view('tasks.edit',compact('task'));
+
     }
 
     /**
@@ -81,7 +86,19 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+        'nome'=>'required',
+        'endereco'=> 'required',
+        'numero' => 'required|integer'
+      ]);
+
+      $task = Task::find($id);
+      $task->nome = $request->get('nome');
+      $task->endereco = $request->get('endereco');
+      $task->numero = $request->get('numero');
+      $task->save();
+
+      return redirect('/tasks')->with('success', 'Foi atualizado');
     }
 
     /**
@@ -92,6 +109,10 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $task = Task::find($id);
+     $task->delete();
+
+     return redirect('/tasks')->with('success', 'Deletado com sucesso');
+
     }
 }
